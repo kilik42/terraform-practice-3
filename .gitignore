@@ -1,0 +1,80 @@
+# ============================
+# Terraform
+# ============================
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+crash.log
+crash.*.log
+
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+
+# Plan files
+*.tfplan
+tfplan
+
+# ============================
+# Environment / Secrets
+# ============================
+.env
+.env.*
+*.secret
+*.config
+*.local
+
+# ============================
+# Python (if using automation scripts)
+# ============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+.venv/
+venv/
+env/
+
+# ============================
+# Node (if using CDK or frontend)
+# ============================
+node_modules/
+npm-debug.log
+dist/
+build/
+
+# ============================
+# Logs
+# ============================
+*.log
+logs/
+*.out
+
+# ============================
+# OS / Editor Junk
+# ============================
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+.history/
+
+# JetBrains
+.idea/
+
+# ============================
+# CI/CD Artifacts
+# ============================
+workspace/
+*.zip
+*.tar
+*.tar.gz
+
+# ============================
+# S3 Upload Folders (local copies)
+# ============================
+s3_objects/
