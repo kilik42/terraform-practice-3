@@ -1,56 +1,57 @@
 # Elastic IP for NAT gateway
 resource "aws_eip" "eip1" {
-  domain = #
+  domain = "vpc"    # domain = "vpc" is required for NAT gateways in a VPC
+                    # the domain argument specifies that the EIP is for use in a VPC, rather than for EC2-Classic instances.
 
   tags = {
-    Name = #
+    Name = "${var.project_name}-${var.env}-nat-gateway-eip"
   }
 }
 
 # NAT gateway for private subnet internet access
 resource "aws_nat_gateway" "nat_gateway_az1" {
-  allocation_id = #
-  subnet_id     = #
+  allocation_id = aws_eip.eip1.id
+  subnet_id     = aws_subnet.public_subnet_az1.id
 
   tags = {
-    Name = #
+    Name = "${var.project_name}-${var.env}-nat-gateway-az1"
   }
 
   # Ensure the NAT Gateway is created after the Internet Gateway
-  depends_on = #
+  depends_on = [aws_internet_gateway.internet_gateway]
 }
 
 # Private route table - routes traffic through NAT gateway
 resource "aws_route_table" "private_route_table" {
-  vpc_id = #
+  vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block     = #
-    nat_gateway_id = #
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_gateway_az1.id
   }
 
   tags = {
-    Name = #
+    Name = "${var.project_name}-${var.env}-private-route-table"
   }
 }
 
 # Associate private subnets with private route table
 resource "aws_route_table_association" "private_app_subnet_az1_rt_association" {
-  subnet_id      = #
-  route_table_id = #
+  subnet_id      = aws_subnet.private_app_subnet_az1.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 
 resource "aws_route_table_association" "private_data_subnet_az1_rt_association" {
-  subnet_id      = #
-  route_table_id = #
+  subnet_id      = aws_subnet.private_data_subnet_az1.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 
 resource "aws_route_table_association" "private_app_subnet_az2_rt_association" {
-  subnet_id      = #
-  route_table_id = #
+  subnet_id      = aws_subnet.private_app_subnet_az2.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 
 resource "aws_route_table_association" "private_data_subnet_az2_rt_association" {
-  subnet_id      = #
-  route_table_id = #
+  subnet_id      = aws_subnet.private_data_subnet_az2.id
+  route_table_id = aws_route_table.private_route_table.id
 }

@@ -31,7 +31,7 @@ resource "aws_subnet" "public_subnet_az1" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_az1_cidr
   availability_zone       = data.aws_availability_zones.available_zones.names[0]
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = true # Public subnets assign public IPs to instances launched in them
 
   tags = {
     Name = "${var.project_name}-${var.env}-public-subnet-az1"
@@ -54,11 +54,11 @@ resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "0.0.0.0/0" # this route allows all outbound traffic to the internet
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
-  tags = {
+  tags = {  
     Name = "${var.project_name}-${var.env}-public-route-table"
   }
 }
@@ -85,6 +85,11 @@ resource "aws_route_table_association" "public_subnet_az2_rt_association" {
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.vpc.id
 
+  
+  #   # cidr should not be allowed out to the internet, but should be routed to a NAT gateway or NAT instance for outbound internet access. For now, we will allow all outbound traffic to the internet for testing purposes.
+  #   cidr_block = "0.0.0.0/0" # this route allows all outbound traffic to the internet
+  #   gateway_id = aws_internet_gateway.internet_gateway.id
+  # }
   tags = {
     Name = "${var.project_name}-${var.env}-private-route-table"
   }
