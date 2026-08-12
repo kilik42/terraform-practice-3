@@ -82,38 +82,38 @@ resource "aws_route_table_association" "public_subnet_az2_rt_association" {
 ############################private subnets (application and database tiers) - no internet access
 # shouldnt this have a separate route table for private subnets?
 
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.vpc.id
+# resource "aws_route_table" "private_route_table" {
+#   vpc_id = aws_vpc.vpc.id
 
   
-  #   # cidr should not be allowed out to the internet, but should be routed to a NAT gateway or NAT instance for outbound internet access. For now, we will allow all outbound traffic to the internet for testing purposes.
-  #   cidr_block = "0.0.0.0/0" # this route allows all outbound traffic to the internet
-  #   gateway_id = aws_internet_gateway.internet_gateway.id
-  # }
-  tags = {
-    Name = "${var.project_name}-${var.env}-private-route-table"
-  }
-} 
+#   #   # cidr should not be allowed out to the internet, but should be routed to a NAT gateway or NAT instance for outbound internet access. For now, we will allow all outbound traffic to the internet for testing purposes.
+#   #   cidr_block = "0.0.0.0/0" # this route allows all outbound traffic to the internet
+#   #   gateway_id = aws_internet_gateway.internet_gateway.id
+#   # }
+#   tags = {
+#     Name = "${var.project_name}-${var.env}-private-route-table"
+#   }
+# } 
 
-resource "aws_route_table_association" "private_app_subnet_az1_rt_association" {
-  subnet_id      = aws_subnet.private_app_subnet_az1.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_route_table_association" "private_app_subnet_az1_rt_association" {
+#   subnet_id      = aws_subnet.private_app_subnet_az1.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
-resource "aws_route_table_association" "private_app_subnet_az2_rt_association" {  
-  subnet_id      = aws_subnet.private_app_subnet_az2.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_route_table_association" "private_app_subnet_az2_rt_association" {  
+#   subnet_id      = aws_subnet.private_app_subnet_az2.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
-resource "aws_route_table_association" "private_data_subnet_az1_rt_association" {
-  subnet_id      = aws_subnet.private_data_subnet_az1.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_route_table_association" "private_data_subnet_az1_rt_association" {
+#   subnet_id      = aws_subnet.private_data_subnet_az1.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
-resource "aws_route_table_association" "private_data_subnet_az2_rt_association" {
-  subnet_id      = aws_subnet.private_data_subnet_az2.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# resource "aws_route_table_association" "private_data_subnet_az2_rt_association" {
+#   subnet_id      = aws_subnet.private_data_subnet_az2.id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
 # Private app subnets (application tier - ECS, EKS, EC2)
 resource "aws_subnet" "private_app_subnet_az1" {

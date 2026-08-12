@@ -26,7 +26,7 @@ resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0" # this is the default route for all outbound traffic from the private subnets
     nat_gateway_id = aws_nat_gateway.nat_gateway_az1.id
   }
 
