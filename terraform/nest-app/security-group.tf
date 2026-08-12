@@ -1,33 +1,33 @@
 # Security group for EC2 Instance Connect Endpoint
 resource "aws_security_group" "eice_security_group" {
-  name        = #
-  description = "Outbound SSH to VPC CIDR"
-  vpc_id      = #
+  name        = var.eice_security_group_name
+  description = "Allow SSH from VPC CIDR"
+  vpc_id      = var.vpc_id
 
   egress {
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.vpc_cidr]
   }
 
   tags = {
-    Name = #
+    Name = var.eice_security_group_name
   }
 }
 
 # Security group for Application Load Balancer
 resource "aws_security_group" "alb_security_group" {
-  name        = #
+  name        = var.alb_security_group_name
   description = "HTTP/HTTPS from internet"
-  vpc_id      = #
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "HTTP"
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]   
   }
 
   ingress {

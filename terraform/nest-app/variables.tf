@@ -180,3 +180,18 @@ variable "env" {
   type        = "string"
   default     = "dev"
 }
+
+variable "alb_security_group_name" {
+  description = "Security group name for ALB"
+  type        = "string"
+}
+
+variable "eice_security_group_name" {
+  description = "Security group name for EICE"
+  type        = "string"
+}
+
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = "string"
+}
