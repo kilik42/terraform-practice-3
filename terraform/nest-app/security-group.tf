@@ -32,122 +32,123 @@ resource "aws_security_group" "alb_security_group" {
 
   ingress {
     description = "HTTPS"
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 443
+    to_port     = 443   
+  
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = #
+    Name = var.alb_security_group_name
   }
 }
 
 # Security group for application servers (ECS, EC2)
 resource "aws_security_group" "app_server_security_group" {
-  name        = #
+  name        = var.app_server_security_group_name
   description = "HTTP/HTTPS from ALB, SSH from EICE"
-  vpc_id      = #
+  vpc_id      = var.vpc_id
 
   ingress {
     description     = "SSH from EICE"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.eice_security_group.id]     
   }
 
   ingress {
     description     = "HTTP from ALB"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_security_group.id]
   }
 
   ingress {
     description     = "HTTPS from ALB"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_security_group.id]
   }
 
   egress {
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = #
+    Name = var.app_server_security_group_name
   }
 }
 
 # Security group for data migration server
 resource "aws_security_group" "db_migrate_server_security_group" {
-  name        = #
+  name        = var.db_migrate_server_security_group_name
   description = "SSH from EICE"
-  vpc_id      = #
+  vpc_id      = var.vpc_id
 
   ingress {
     description     = "SSH from EICE"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.eice_security_group.id]
   }
 
   egress {
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = #
+    Name = var.db_migrate_server_security_group_name
   }
 }
 
 # Security group for database (RDS, Aurora)
 resource "aws_security_group" "database_security_group" {
-  name        = #
+  name        = var.database_security_group_name
   description = "MySQL/Aurora from app and migration servers"
-  vpc_id      = #
+  vpc_id      = var.vpc_id
 
   ingress {
     description     = "MySQL/Aurora from app servers"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.app_server_security_group.id]
   }
 
   ingress {
     description     = "MySQL/Aurora from data migration server"
-    from_port       = #
-    to_port         = #
-    protocol        = #
-    security_groups = #
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.db_migrate_server_security_group.id]
   }
 
   egress {
-    from_port   = #
-    to_port     = #
-    protocol    = #
-    cidr_blocks = #
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = #
+    Name = var.database_security_group_name
   }
 }

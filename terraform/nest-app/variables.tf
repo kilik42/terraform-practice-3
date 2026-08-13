@@ -195,3 +195,18 @@ variable "vpc_id" {
   description = "VPC ID"
   type        = "string"
 }
+
+variable "app_server_security_group_name" {
+  description = "Security group name for application servers"
+  type        = "string"
+}
+
+variable "db_migrate_server_security_group_name" {
+  description = "Security group name for database migration server"
+  type        = "string"
+}
+
+variable "database_security_group_name" {
+  description = "Security group name for database"
+  type        = "string"
+}
