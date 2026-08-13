@@ -1,7 +1,7 @@
 # Security group for EC2 Instance Connect Endpoint
 resource "aws_security_group" "eice_security_group" {
-  name        = var.eice_security_group_name
-  description = "Allow SSH from VPC CIDR"
+  name        = "${var.env}-${var.project_name}-eice-sg"
+  description = "outbound ssh to vpc cidr"
   vpc_id      = var.vpc_id
 
   egress {
@@ -110,7 +110,7 @@ resource "aws_security_group" "db_migrate_server_security_group" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" # -1 means all protocols
     cidr_blocks = ["0.0.0.0/0"]
   }
 
